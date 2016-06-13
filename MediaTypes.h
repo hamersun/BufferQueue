@@ -3,12 +3,17 @@
 
 namespace AwMirrorOp {
 
-enum VideoType {
+enum MediaType {
+    VIDEO,
+    AUDIO
+};
+
+enum VideoFormat {
     H264,
     H265
 };
 
-enum AudioType {
+enum AudioFormat {
     PCM,
     AAC
 };

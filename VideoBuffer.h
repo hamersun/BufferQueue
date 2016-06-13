@@ -2,25 +2,31 @@
 #define __AW_VIDEO_BUFFER_H_
 
 #include "MediaTypes.h"
+#include "MediaBuffer.h"
+#include <memory>
 
 namespace AwMirrorOp {
 
-class MediaBuffer;
+class VideoBuffer;
+typedef std::shared_ptr<VideoBuffer> VideoBufferPtr;
 
 class VideoBuffer : public MediaBuffer {
 
 public:
-    VideoBuffer(VideoType type);
-    VideoBuffer(int dataSize, VideoType type);
-    VideoBuffer(int dataSize, char const*data, VideoType type);
-    ~VideoBuffer();
+    VideoBuffer(VideoFormat format);
+    VideoBuffer(const uint32_t capacity, VideoFormat format);
+    virtual ~VideoBuffer();
 
-    void setIFrame(bool type);
-    bool isIFrame();
+    static VideoBuffer* createBuffer(const uint32_t capacity, const VideoFormat format);
+
+    void setIFrame(bool iframe);
+    bool isIFrame() const;
+    void setFormat(VideoFormat format);
+    VideoFormat format() const;
 
 private:
     bool _mbIFrame;
-    VideoType _mType;
+    VideoFormat _mFormat;
 };
 
 }; // namespace AwMirrorOp
