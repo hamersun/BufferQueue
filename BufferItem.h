@@ -38,6 +38,8 @@ public:
     BufferItem(MediaBufferPtr buffer);
     ~BufferItem();
 
+    static BufferItemPtr createBufferItem(MediaType type, const uint32_t buffer_capacity);
+
     MediaBufferPtr buffer() const;
 
     void setState(BufferItem::BufferState state);

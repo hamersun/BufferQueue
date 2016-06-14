@@ -1,6 +1,23 @@
 #include "BufferItem.h"
+#include "VideoBuffer.h"
 
 namespace AwMirrorOp {
+
+BufferItemPtr BufferItem::createBufferItem(MediaType type, const uint32_t buffer_capacity)
+{
+    MediaBufferPtr buffer;
+    if (type == VIDEO) {
+		buffer = (MediaBufferPtr)(VideoBuffer::createBuffer(buffer_capacity, VideoFormat::H264));
+	}
+	else if (type == AUDIO) {
+		//buffer = (MediaBufferPtr) (AudioBuffer::createBuffer(buffer_capacity, AudioFormat::PCM));
+	}
+	else {
+		return nullptr;
+	}
+	BufferItemPtr item = std::make_shared<BufferItem>(buffer);
+	return item;
+}
 
 BufferItem::BufferItem(MediaBufferPtr buffer) :
     _mBuffer(buffer),

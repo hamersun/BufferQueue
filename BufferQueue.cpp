@@ -47,8 +47,10 @@ status_t BufferQueue::dequeueBuffer(BufferItemPtr &buffer)
         return NO_BUFFER;
     }
     buffer = _mFirstFreeBuffer;
-    buffer->setState(BufferItem::DEQUEUED);
     _mFirstFreeBuffer = _mFirstFreeBuffer->nextBufferItem();
+    if (_mFirstFreeBuffer == nullptr) _mLastFreeBuffer = nullptr;
+    buffer->setState(BufferItem::DEQUEUED);
+    buffer->setNextBufferItem(nullptr);
     return OK;
 }
 
@@ -81,8 +83,11 @@ status_t BufferQueue::releaseBuffer(BufferItemPtr &buffer)
         videoBuffer->setIFrame(false);
     }
     buffer->setNextBufferItem(nullptr);
-    _mLastFreeBuffer->setNextBufferItem(buffer);
-    //if (_mFirstFreeBuffer == nullptr) _mFirstFreeBuffer = _mLastFreeBuffer;
+    if (_mLastFreeBuffer == nullptr) {
+        _mFirstFreeBuffer = buffer;
+    } else {
+        _mLastFreeBuffer->setNextBufferItem(buffer);
+    }
     _mLastFreeBuffer = buffer;
     return OK;
 }
@@ -107,13 +112,14 @@ status_t BufferQueue::_preAllocateBufferPools(MediaType type, const uint16_t cou
             capacity = buffer_capacity;
         }
 
-        if	(_mFirstFreeBuffer == nullptr) {
-            item = _createBufferItem(type, capacity);
+        if (_mFirstFreeBuffer == nullptr) {
+            item = BufferItem::createBufferItem(type, capacity);
             _mFirstFreeBuffer = item;
         } else {
-            item->setNextBufferItem(_createBufferItem(type, capacity));
+            item->setNextBufferItem(BufferItem::createBufferItem(type, capacity));
             item = item->nextBufferItem();
         }
+        item->setSlot(i);
     }
     item->setNextBufferItem(nullptr);
     _mLastFreeBuffer = item;
@@ -122,25 +128,14 @@ status_t BufferQueue::_preAllocateBufferPools(MediaType type, const uint16_t cou
     return OK;
 }
 
-BufferItemPtr BufferQueue::_createBufferItem(MediaType type, const uint32_t buffer_capacity)
-{
-    MediaBufferPtr buffer;
-    if (type == VIDEO) {
-        buffer = (MediaBufferPtr) (VideoBuffer::createBuffer(buffer_capacity, VideoFormat::H264));
-    } else if (type == AUDIO) {
-        //buffer = (MediaBufferPtr) (AudioBuffer::createBuffer(buffer_capacity, AudioFormat::PCM));
-    } else {
-        return nullptr;
-    }
-    BufferItemPtr item = std::make_shared<BufferItem>(buffer);
-    return item;
-}
-
 void BufferQueue::_addBuffer(BufferItemPtr &buffer)
 {
+	buffer->setNextBufferItem(nullptr);
     if (_mFirstBuffer == nullptr) {
         _mFirstBuffer = buffer;
-        _mLastBuffer = _mFirstBuffer;
+    } else if (_mLastBuffer == nullptr) {
+        _mFirstBuffer->setNextBufferItem(buffer);
+        _mLastBuffer = buffer;
     } else {
         _mLastBuffer->setNextBufferItem(buffer);
         _mLastBuffer = buffer;

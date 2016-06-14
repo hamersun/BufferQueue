@@ -32,7 +32,6 @@ private:
     BufferQueue &operator=(const BufferQueue &rhs);
 
     status_t _preAllocateBufferPools(MediaType type, const uint16_t count, const uint32_t buffer_capacity);
-    BufferItemPtr _createBufferItem(MediaType type, const uint32_t buffer_capacity);
     virtual void _addBuffer(BufferItemPtr &buffer);
 
     bool _mbInited;
