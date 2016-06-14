@@ -50,7 +50,8 @@ void producer_thread(BufferQueuePtr arg)
 
         if ((ret = queue->dequeueBuffer(buf)) != OK) {
             cerr << "dequeueBuffer failed..: " << ret << endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            //std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
@@ -64,6 +65,7 @@ void producer_thread(BufferQueuePtr arg)
         }
         queue->queueBuffer(buf);
         cout << "queue a buffer with sn: " << dataBuf->serialnumber() << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
     }
 }
 
@@ -87,7 +89,8 @@ void consumer_thread(BufferQueuePtr arg)
 
         if ((ret = queue->acquireBuffer(buf)) != OK) {
             cerr << "acquireBuffer failed ...: " << ret << endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            //std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
@@ -97,5 +100,6 @@ void consumer_thread(BufferQueuePtr arg)
         memset(data, 0, dataBuf->size());
         dataBuf->setDataSize(0);
         queue->releaseBuffer(buf);
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
     }
 }
