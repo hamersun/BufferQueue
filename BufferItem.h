@@ -2,7 +2,6 @@
 #define _AW_BUFFER_ITEM_H_
 
 #include <stdint.h>
-//#include <boost/shared_ptr.hpp>
 #include <memory>
 
 #include "MediaBuffer.h"
@@ -39,23 +38,15 @@ public:
     BufferItem(MediaBufferPtr buffer);
     ~BufferItem();
 
-    MediaBufferPtr buffer() const {
-        return _mBuffer;
-    };
+    MediaBufferPtr buffer() const;
 
-    void setState(BufferState state) {
-        _mState = state;
-    };
-    BufferState state() const {
-        return _mState;
-    };
+    void setState(BufferState state);
 
-    void setSlot(int32_t num) {
-        _mSlot = num;
-    };
-    int32_t slot() const {
-        return _mSlot;
-    };
+    BufferState state() const;
+
+    void setSlot(int32_t num);
+
+    int32_t slot() const;
 
 private:
     friend class BufferQueue;
@@ -66,12 +57,9 @@ private:
 
     BufferItemPtr _mNextItem;
 
-    void setNextBufferItem(BufferItemPtr item) {
-        _mNextItem = item;
-    };
-    BufferItemPtr nextBufferItem() const {
-        return _mNextItem;
-    };
+    void setNextBufferItem(BufferItemPtr item);
+
+    BufferItemPtr nextBufferItem() const;
 };
 
 }; // namespace AwMirrorOp

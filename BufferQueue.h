@@ -9,7 +9,8 @@
 
 namespace AwMirrorOp {
 
-//typedef boost::shared_ptr<BufferItem> BufferItemPtr;
+class BufferQueue;
+typedef std::shared_ptr<BufferQueue> BufferQueuePtr;
 typedef std::shared_ptr<BufferItem> BufferItemPtr;
 
 class BufferQueue {

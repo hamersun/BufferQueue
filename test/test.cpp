@@ -7,11 +7,6 @@
 #include "BufferQueue.h"
 #include "VideoBuffer.h"
 
-//#include "boost\thread.hpp"
-//#include "boost\chrono.hpp"
-//#include "boost\thread\scoped_thread.hpp"
-
-
 using namespace std;
 using namespace AwMirrorOp;
 
@@ -23,12 +18,10 @@ void consumer_thread(std::shared_ptr<BufferQueue> arg);
 
 int main(int argc, char *argv[])
 {
-    //BufferQueue *bufQueue = new BufferQueue();
-    std::shared_ptr<BufferQueue> bufQueue = std::make_shared<BufferQueue>();
+    BufferQueuePtr bufQueue = std::make_shared<BufferQueue>();
 
     bufQueue->init(VIDEO, 8, 1024*20);
 
-    //boost::thread t{producer_thread};
     std::thread t_p(producer_thread, bufQueue);
     std::thread t_c(consumer_thread, bufQueue);
 
@@ -38,14 +31,17 @@ int main(int argc, char *argv[])
 }
 
 
-void producer_thread(std::shared_ptr<BufferQueue> arg)
+void producer_thread(BufferQueuePtr arg)
 {
     BufferItemPtr buf;
-    //BufferQueue *queue = (BufferQueue*)(arg);
-    std::shared_ptr<BufferQueue> queue = arg;
+    BufferQueuePtr queue = arg;
     if (queue == nullptr) {
         cerr << __FUNCTION__ << ": BufferQueue is null" << endl;
         return;
+    }
+    if (queue->initCheck() != NO_ERROR) {
+	cerr << __FUNCTION << ": BufferQueue is not inited" << endl;
+	return;
     }
 
     bRunProducer = true;
@@ -70,15 +66,18 @@ void producer_thread(std::shared_ptr<BufferQueue> arg)
     }
 }
 
-void consumer_thread(std::shared_ptr<BufferQueue> arg)
+void consumer_thread(BufferQueuePtr arg)
 {
     BufferItemPtr buf;
-    //BufferQueue *queue = (BufferQueue*)(arg);
-    std::shared_ptr<BufferQueue> queue = arg;
+    BufferQueuePtr queue = arg;
 
     if (queue == nullptr) {
         cerr << __FUNCTION__ << ": BufferQueue is null" << endl;
         return;
+    }
+    if (queue->initCheck() != NO_ERROR) {
+	cerr << __FUNCTION << ": BufferQueue is not inited" << endl;
+	return;
     }
 
     bRunConsumer = true;

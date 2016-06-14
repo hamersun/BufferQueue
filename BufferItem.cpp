@@ -18,4 +18,35 @@ BufferItem::~BufferItem()
     _mNextItem = nullptr;
 }
 
+MediaBufferPtr BufferItem::buffer() const
+{
+    return _mBuffer;
+}
+
+BufferState BufferItem::state() const
+{
+    reutrn _mState;
+}
+
+void BufferItem::setSlot(int32_t num)
+{
+    _mSlot = num;
+}
+
+int32_t BufferItem::slot() const
+{
+    return _mSlot;
+}
+
+//========== private functions ===============//
+void BufferItem::setNextBufferItem(BufferItemPtr item)
+{
+    _mNextItem = item;
+}
+
+BufferItemPtr BufferItem::nextBufferItem() const
+{
+    return _mNextItem;
+}
+
 } // namespace AwMirrorOp
