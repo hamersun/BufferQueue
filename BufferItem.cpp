@@ -23,9 +23,14 @@ MediaBufferPtr BufferItem::buffer() const
     return _mBuffer;
 }
 
-BufferState BufferItem::state() const
+void BufferItem::setState(BufferItem::BufferState state)
 {
-    reutrn _mState;
+    _mState = state;
+}
+
+BufferItem::BufferState BufferItem::state() const
+{
+    return _mState;
 }
 
 void BufferItem::setSlot(int32_t num)

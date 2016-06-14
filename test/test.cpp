@@ -3,6 +3,7 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <cstring>
 
 #include "BufferQueue.h"
 #include "VideoBuffer.h"
@@ -30,7 +31,6 @@ int main(int argc, char *argv[])
     t_c.join();
 }
 
-
 void producer_thread(BufferQueuePtr arg)
 {
     BufferItemPtr buf;
@@ -40,8 +40,8 @@ void producer_thread(BufferQueuePtr arg)
         return;
     }
     if (queue->initCheck() != NO_ERROR) {
-	cerr << __FUNCTION << ": BufferQueue is not inited" << endl;
-	return;
+	    cerr << __FUNCTION__ << ": BufferQueue is not inited" << endl;
+	    return;
     }
 
     bRunProducer = true;
@@ -63,6 +63,7 @@ void producer_thread(BufferQueuePtr arg)
             video->setIFrame(true);
         }
         queue->queueBuffer(buf);
+        cout << "queue a buffer with sn: " << dataBuf->serialnumber() << endl;
     }
 }
 
@@ -76,8 +77,8 @@ void consumer_thread(BufferQueuePtr arg)
         return;
     }
     if (queue->initCheck() != NO_ERROR) {
-	cerr << __FUNCTION << ": BufferQueue is not inited" << endl;
-	return;
+    	cerr << __FUNCTION__ << ": BufferQueue is not inited" << endl;
+	    return;
     }
 
     bRunConsumer = true;
@@ -91,6 +92,7 @@ void consumer_thread(BufferQueuePtr arg)
         }
 
         MediaBufferPtr dataBuf = buf->buffer();
+        cout << "acquire a buffer with sn: " << dataBuf->serialnumber() << endl;
         void *data = dataBuf->data();
         memset(data, 0, dataBuf->size());
         dataBuf->setDataSize(0);

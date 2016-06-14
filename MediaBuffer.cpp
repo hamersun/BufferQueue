@@ -1,7 +1,7 @@
 #include "MediaBuffer.h"
 
-#include <stdlib.h>
 #include <memory>
+#include <cstring>
 
 namespace AwMirrorOp {
 
@@ -29,7 +29,7 @@ status_t MediaBuffer::copyData(void * data, const uint32_t size)
     if (size > _mCapacity) {
         if ((ret = _reallocate(size)) != NO_ERROR) return ret;
     }
-    memcpy(_mData, data, size);
+    std::memcpy(_mData, data, size);
     _mSize = size;
     return NO_ERROR;
 }

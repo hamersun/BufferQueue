@@ -39,7 +39,6 @@ status_t BufferQueue::initCheck() const
     return NO_ERROR;
 }
 
-
 status_t BufferQueue::dequeueBuffer(BufferItemPtr &buffer)
 {
     std::lock_guard<std::mutex> lock(_mMutex);
@@ -83,7 +82,7 @@ status_t BufferQueue::releaseBuffer(BufferItemPtr &buffer)
     }
     buffer->setNextBufferItem(nullptr);
     _mLastFreeBuffer->setNextBufferItem(buffer);
-    if (_mFirstFreeBuffer == nullptr) _mFirstFreeBuffer = _mLastFreeBuffer;
+    //if (_mFirstFreeBuffer == nullptr) _mFirstFreeBuffer = _mLastFreeBuffer;
     _mLastFreeBuffer = buffer;
     return OK;
 }
@@ -92,7 +91,6 @@ status_t BufferQueue::releaseBuffer(BufferItemPtr &buffer)
 
 status_t BufferQueue::_preAllocateBufferPools(MediaType type, const uint16_t count, const uint32_t buffer_capacity)
 {
-    uint16_t _count = (uint16_t) count;
     uint8_t bigBufCount = 0;
     uint32_t sizeOfBigBuf = 0;
     if (type == VIDEO) {

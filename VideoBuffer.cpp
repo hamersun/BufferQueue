@@ -10,15 +10,15 @@ VideoBuffer* VideoBuffer::createBuffer(const uint32_t capacity, const VideoForma
 
 VideoBuffer::VideoBuffer(VideoFormat format) :
     MediaBuffer(0, VIDEO),
-    _mFormat(H265),
-    _mbIFrame(false)
+    _mbIFrame(false),
+    _mFormat(H265)
 {
 }
 
 VideoBuffer::VideoBuffer(const uint32_t capacity, VideoFormat format) :
     MediaBuffer(capacity, VIDEO),
-    _mFormat(format),
-    _mbIFrame(false)
+    _mbIFrame(false),
+    _mFormat(format)
 {
 }
 

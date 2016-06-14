@@ -40,9 +40,9 @@ public:
 
     MediaBufferPtr buffer() const;
 
-    void setState(BufferState state);
+    void setState(BufferItem::BufferState state);
 
-    BufferState state() const;
+    BufferItem::BufferState state() const;
 
     void setSlot(int32_t num);
 
@@ -52,7 +52,7 @@ private:
     friend class BufferQueue;
 
     MediaBufferPtr _mBuffer;
-    BufferState _mState;
+    BufferItem::BufferState _mState;
     int32_t _mSlot;
 
     BufferItemPtr _mNextItem;
@@ -62,5 +62,5 @@ private:
     BufferItemPtr nextBufferItem() const;
 };
 
-}; // namespace AwMirrorOp
+} // namespace AwMirrorOp
 #endif // _AW_BUFFER_ITEM_H_
