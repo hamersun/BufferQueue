@@ -16,6 +16,7 @@ BufferItemPtr BufferItem::createBufferItem(MediaType type, const uint32_t buffer
 		return nullptr;
 	}
 	BufferItemPtr item = std::make_shared<BufferItem>(buffer);
+    buffer->setBox(item);
 	return item;
 }
 

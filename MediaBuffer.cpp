@@ -1,5 +1,6 @@
 #include "MediaBuffer.h"
 
+#include "BufferItem.h"
 #include <memory>
 #include <cstring>
 
@@ -66,7 +67,18 @@ uint64_t MediaBuffer::serialnumber()
     return _mSN;
 }
 
+std::shared_ptr<BufferItem> MediaBuffer::getBox()
+{
+    auto box = _mBox.lock();
+    return box;
+}
+
 // ================ private functions =================== //
+
+void MediaBuffer::setBox(std::shared_ptr<BufferItem> box)
+{
+    _mBox = box;
+}
 
 status_t MediaBuffer::_reallocate(const uint32_t capacity)
 {
